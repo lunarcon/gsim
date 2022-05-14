@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
     double dt = 100;
     double t = 0;
 
-    while (update(&moon, &earth, dt);) {
+    while (update(&moon, &earth, dt)) {
         t += dt;
         // cout << "Moon pos: " << string(moon.pos) << " Earth pos: " << string(earth.pos) << " dist: " << earth.pos.dist_to(moon.pos) << " ____\r";
         map_position_to_console(&earth, 31);
