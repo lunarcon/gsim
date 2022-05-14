@@ -1,11 +1,15 @@
 #include <math.h>
 #include <string>
 #include <iostream>
+#include <cstdlib>
 #include "body.cpp"
 
 #define G 6.67408e-11
-#define scalex 14/2
-#define scaley 30/2
+int scalex = 14/2;
+int scaley = 30/2;
+
+int conX = 120;
+int conY = 60;
 
 using namespace std;
 
@@ -61,22 +65,30 @@ void print_obj_info(body* p, int x, int y) {
 }
 
 void map_position_to_console(body* p, int r , int g, int b) {
-    int x = p->pos.x / (scalex*1000000) + 61;
-    int y = p->pos.y / (scaley*1000000) + 31;
+    int x = p->pos.x / (scalex*1000000) + (int)conX/2 +1;
+    int y = p->pos.y / (scaley*1000000) + (int)conY/2 +1;
     int* old = p->trailgrow(x,y);
-    if (x<0 || x > 120 || y<0 || y>60) {return;}
+    if (x<0 || x > conX || y<0 || y > conY) {return;}
     set_char_at(old[0],old[1],'*',50,50,50);
     set_char_at(x, y, '*', r, g, b);
 }
 
+void generate_stars(int n) {
+    for (int i = 0; i < n; i++) {
+        int x = rand() % conX;
+        int y = rand() % conY;
+        set_char_at(x, y, '.', 255, 255, 255);
+    }
+}
+
 void clear_pos(vec3* p) {
-    set_char_at(p->x / (scalex*1000000) + 61, p->y / (scaley*1000000) + 31, ' ', 0,0,0);
+    set_char_at(p->x / (scalex*1000000) + (int)conX/2 + 1, p->y / (scaley*1000000) + (int)conY/2 + 1, ' ', 0,0,0);
 }
 
 int main(int argc, char* argv[]) {
 
     hide_cursor();
-    set_console_sz(120, 60);
+    set_console_sz(conX, conY);
 
     system("title GravitySim");
 
@@ -86,15 +98,15 @@ int main(int argc, char* argv[]) {
     double Mm = 7.348e22;
     double Rm = 1.73e6;
 
-    body earth("Earth", Re, Me, vec3(0,0,0), vec3(0,-12.5,0), 2);
+    body earth("Earth", Re, Me, vec3(0,0,0), vec3(0,-12.5,0), 1);
     body moon("Moon", Rm, Mm, vec3(3.84399e8,0,20), vec3(0,1020,0), 10);
     body satellite("Satellite", 1, 100, vec3(Re+1.5e8,Re-1.5e8,0), vec3(800,700,0), 5);
 
     double dt = 1000;
     double t = 0;
 
-    getchar();
     system("cls");
+    generate_stars(100);
 
     while (update(&moon, &earth, dt) && update(&satellite, &earth, dt)) {
         t += dt;
