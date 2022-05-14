@@ -64,7 +64,10 @@ void print_obj_info(body* p, int x, int y) {
     cout.flush();
 }
 
-void map_position_to_console(body* p, int r , int g, int b) {
+void draw(body* p) {
+    int r = p->color.x;
+    int g = p->color.y;
+    int b = p->color.z;
     int x = p->pos.x / (scalex*1000000) + (int)conX/2 +1;
     int y = p->pos.y / (scaley*1000000) + (int)conY/2 +1;
     int* old = p->trailgrow(x,y);
@@ -98,9 +101,9 @@ int main(int argc, char* argv[]) {
     double Mm = 7.348e22;
     double Rm = 1.73e6;
 
-    body earth("Earth", Re, Me, vec3(0,0,0), vec3(0,-12.5,0), 1);
-    body moon("Moon", Rm, Mm, vec3(3.84399e8,0,20), vec3(0,1020,0), 10);
-    body satellite("Satellite", 1, 100, vec3(Re+1.5e8,Re-1.5e8,0), vec3(800,700,0), 5);
+    body earth("Earth", Re, Me, vec3(0,0,0), vec3(0,-12.5,0), 1, vec3(50,100,240));
+    body moon("Moon", Rm, Mm, vec3(3.84399e8,0,20), vec3(0,1020,0), 1, vec3(150, 150, 150));
+    body satellite("Satellite", 1, 100, vec3(Re+1.5e8,Re-1.5e8,0), vec3(750,700,0), 1, vec3(130, 250, 0));
 
     double dt = 1000;
     double t = 0;
@@ -111,9 +114,9 @@ int main(int argc, char* argv[]) {
     while (update(&moon, &earth, dt) && update(&satellite, &earth, dt)) {
         t += dt;
         // cout << "Moon pos: " << string(moon.pos) << " Earth pos: " << string(earth.pos) << " dist: " << earth.pos.dist_to(moon.pos) << " ____\r";
-        map_position_to_console(&earth, 30,80,240);
-        map_position_to_console(&moon, 150, 150, 150);
-        map_position_to_console(&satellite, 130, 250, 0);
+        draw(&earth);
+        draw(&moon);
+        draw(&satellite);
         print_obj_info(&earth, 0, 1);
         print_obj_info(&moon, 0, 2);
         print_obj_info(&satellite, 0, 3);

@@ -12,14 +12,17 @@ class body {
                 this->pos = vec3();
                 this->vel = vec3();
                 this->trailSz = 2;
+                this->color = vec3(0, 0, 0);
+
         }
-        body(std::string name, double radius, double mass, vec3 pos, vec3 vel, int trailSz) {
+        body(std::string name, double radius, double mass, vec3 pos, vec3 vel, int trailSz, vec3 color) {
                 this->name = name;
                 this->radius = radius;
                 this->mass = mass;
                 this->pos = pos;
                 this->vel = vel;
                 this->trailSz = trailSz;
+                this->color = color;
         }
         std::string name;
         double radius;
@@ -27,6 +30,7 @@ class body {
         vec3 pos;
         vec3 vel;
         int trailSz;
+        vec3 color;
         std::list<int> trailX = std::list<int>();
         std::list<int> trailY = std::list<int>();
         int* trailgrow(int x, int y) {
