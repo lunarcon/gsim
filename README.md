@@ -11,6 +11,7 @@ the z part of the vectors isn't really used, so i put in a random small value<br
 - now shows trails
 - better visualizations
 - added an example satellite
+- added randomly generated stars
 
 ## bugs
 - run in conhost, not wt
