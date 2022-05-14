@@ -93,6 +93,9 @@ int main(int argc, char* argv[]) {
     double dt = 1000;
     double t = 0;
 
+    getchar();
+    system("cls");
+
     while (update(&moon, &earth, dt) && update(&satellite, &earth, dt)) {
         t += dt;
         // cout << "Moon pos: " << string(moon.pos) << " Earth pos: " << string(earth.pos) << " dist: " << earth.pos.dist_to(moon.pos) << " ____\r";
