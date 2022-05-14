@@ -44,10 +44,6 @@ class body {
                 }
                 return new int[2]{retx, rety};
         }
-        int* get_second_last() {
-                if (trailX.size() > 1) {
-                        return new int[2]{trailX.back(), trailY.back()};
-                }
-        }
+        
 
 };

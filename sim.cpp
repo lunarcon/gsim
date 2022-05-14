@@ -68,10 +68,8 @@ void map_position_to_console(body* p, int r , int g, int b) {
     int x = p->pos.x / (scalex*1000000) + (int)conX/2 +1;
     int y = p->pos.y / (scaley*1000000) + (int)conY/2 +1;
     int* old = p->trailgrow(x,y);
-    int* sl = p->get_second_last();
     if (x<0 || x > conX || y<0 || y > conY) {return;}
-    set_char_at(old[0],old[1],' ',0,0,0);
-    set_char_at(sl[0],sl[1],'*',50,50,50);
+    set_char_at(old[0],old[1],'*',50,50,50);
     set_char_at(x, y, '*', r, g, b);
 }
 
