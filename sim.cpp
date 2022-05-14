@@ -50,8 +50,8 @@ void set_console_sz(int x, int y) {
     cout.flush();
 }
 
-void set_char_at(int x, int y, char c, int color) {
-    cout << "\033[" << y << ";" << x << "H" << "\033[" << color << "m" << c << "\033[0m";
+void set_char_at(int x, int y, char c, int r, int g, int b) {
+    cout << "\033[" << y << ";" << x << "H" << "\033[38;2;" << r << ";" << g << ";" << b << "m" << c << "\033[0m";
     cout.flush();
 }
 
@@ -60,14 +60,17 @@ void print_obj_info(body* p, int x, int y) {
     cout.flush();
 }
 
-void map_position_to_console(body* p, int color) {
+void map_position_to_console(body* p, int r , int g, int b) {
     int x = p->pos.x / (scalex*1000000) + 61;
     int y = p->pos.y / (scaley*1000000) + 31;
-    set_char_at(x, y, '*', color);
+    int* old = p->trailgrow(x,y);
+    if (x<0 || x > 120 || y<0 || y>60) {return;}
+    set_char_at(old[0],old[1],'*',50,50,50);
+    set_char_at(x, y, '*', r, g, b);
 }
 
 void clear_pos(vec3* p) {
-    set_char_at(p->x / (scalex*1000000) + 61, p->y / (scaley*1000000) + 31, ' ', 0);
+    set_char_at(p->x / (scalex*1000000) + 61, p->y / (scaley*1000000) + 31, ' ', 0,0,0);
 }
 
 int main(int argc, char* argv[]) {
@@ -83,19 +86,22 @@ int main(int argc, char* argv[]) {
     double Mm = 7.348e22;
     double Rm = 1.73e6;
 
-    body earth("Earth", Re, Me, vec3(0,0,0), vec3(0,-12.5,0));
-    body moon("Moon", Rm, Mm, vec3(3.84399e8,0,20), vec3(0,1020,0));
+    body earth("Earth", Re, Me, vec3(0,0,0), vec3(0,-12.5,0), 2);
+    body moon("Moon", Rm, Mm, vec3(3.84399e8,0,20), vec3(0,1020,0), 10);
+    body satellite("Satellite", 1, 100, vec3(Re+1.5e8,Re-1.5e8,0), vec3(800,700,0), 5);
 
-    double dt = 100;
+    double dt = 1000;
     double t = 0;
 
-    while (update(&moon, &earth, dt)) {
+    while (update(&moon, &earth, dt) && update(&satellite, &earth, dt)) {
         t += dt;
         // cout << "Moon pos: " << string(moon.pos) << " Earth pos: " << string(earth.pos) << " dist: " << earth.pos.dist_to(moon.pos) << " ____\r";
-        map_position_to_console(&earth, 31);
-        map_position_to_console(&moon, 32);
+        map_position_to_console(&earth, 30,80,240);
+        map_position_to_console(&moon, 150, 150, 150);
+        map_position_to_console(&satellite, 130, 250, 0);
         print_obj_info(&earth, 0, 1);
         print_obj_info(&moon, 0, 2);
+        print_obj_info(&satellite, 0, 3);
     } cout << endl;
     cout << "collision at t = " << t << endl;
     return 0;
