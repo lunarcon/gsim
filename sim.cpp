@@ -59,17 +59,19 @@ void set_char_at(int x, int y, char c, int r, int g, int b) {
     cout.flush();
 }
 
-void print_obj_info(body* p, int x, int y) {
+void obj_info(body* p, int x, int y) {
     cout << "\033[" << y << ";" << x << "H" << p->name << ": " << string(p->pos);
     cout.flush();
 }
 
 void draw(body* p) {
+    int x = p->pos.x / (scalex*1000000) + (int)conX/2 +1;
+    int y = p->pos.y / (scaley*1000000) + (int)conY/2 +1;
+    int z = p->pos.z / (scaley*1000000);
     int r = p->color.x;
     int g = p->color.y;
     int b = p->color.z;
-    int x = p->pos.x / (scalex*1000000) + (int)conX/2 +1;
-    int y = p->pos.y / (scaley*1000000) + (int)conY/2 +1;
+
     int* old = p->trailgrow(x,y);
     if (x<0 || x > conX || y<0 || y > conY) {return;}
     set_char_at(old[0],old[1],'*',50,50,50);
@@ -117,9 +119,9 @@ int main(int argc, char* argv[]) {
         draw(&earth);
         draw(&moon);
         draw(&satellite);
-        print_obj_info(&earth, 0, 1);
-        print_obj_info(&moon, 0, 2);
-        print_obj_info(&satellite, 0, 3);
+        obj_info(&earth, 0, 1);
+        obj_info(&moon, 0, 2);
+        obj_info(&satellite, 0, 3);
     } cout << endl;
     cout << "collision at t = " << t << endl;
     return 0;
